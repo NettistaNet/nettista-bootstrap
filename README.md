@@ -1,4 +1,4 @@
-# Create a basic cluster for kubernetes
+# Create a basic cluster for Kubernetes
 These scripts integrate and document the creation and preparation of base-infrastructure at Hetzner Cloud for a Kubernetes setup.
 
 ## Preparation steps
@@ -60,4 +60,37 @@ The terraform-script is located in repository `https://github.com/NettistaNet/ne
 * node_type - type of virtual-server / default: cx21
 * node_location - location of nodes / default: nbg1
 
-If you prefer to override one of these variables please append `--var "<key>=<value>"` to the above script parameter-list.
+If you prefer to override one of these variables append `--var "<key>=<value>"` to the above script parameter-list.
+
+## Ansible - Configuration of the base-infrastructure
+
+Execute script `nettista-gen-inv.sh` to generate ansible-inventories for [Kubespray](https://kubespray.io) and the preparation of the base-infrastructure.
+
+Prerequisite is that Kubespray is available in `../kubespray`.
+
+```bash
+# Cloning of the Kubespray repository
+git clone -C ../kubespray https://github.com/kubernetes-sigs/kubespray.git
+# Checkout a specific release-tag
+git checkout <tag>
+# Create ansible inventories
+./nettista-gen-inv.sh \
+--cluster-name <clustername> \
+--token <hetzner-api-token> \
+--backup-url <webdav-backup-url> \
+--backup-mount-location <backup-mount-location> \ 
+--backup-user <backup-user> \
+--backup-password <backup-password>
+```
+Now everything is prepared to start ansible. 
+
+```bash
+# Execute ansible-roles
+sudo ansible-playbook \
+-e 'host_key_checking=False' \
+-e 'ansible_python_interpreter=/usr/bin/python3' \
+-i ../../clusters/<clustername>/inventories/bootstrap/hosts.ini \
+--user=root --private-key=../../clusters/<clustername>/keys/node.key \
+--become \
+bootstrap.yml
+```
