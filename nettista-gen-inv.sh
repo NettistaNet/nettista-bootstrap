@@ -3,7 +3,7 @@
 # (c) Copyright 2020 Sascha Retter, All Rights Reserved
 
 PARAMS=""
-VERSION=0.1.0
+VERSION=0.1.1
 
 # Determine information
 this_path=$(readlink -f $0)
@@ -138,16 +138,15 @@ export CONFIG_FILE=$INVENTORY_BASE_PATH/kubespray/hosts.yml
 
 for ip in $SERVER_IP; do
    serverIndex=$((serverIndex+1))
-   echo "Add to $INVENTORYIP"
+   echo "Add $ip to ${INVENTORYIP[@]}"
    INVENTORYIP+=("10.0.1.$serverIndex,$ip")
-   echo $INVENTORYIP
-   python3 $KUBESPRAY_BASE_PATH/contrib/inventory_builder/inventory.py "10.0.1.$serverIndex,$ip"
    echo $ip >> $INVENTORY_BASE_PATH/bootstrap/hosts.ini
    echo -e "---\nwireguard_address: 10.0.1.$serverIndex/24" > $INVENTORY_BASE_PATH/bootstrap/host_vars/$ip
    echo -e "PrivateKey: $(wg genkey | tee privatekey)" >> $INVENTORY_BASE_PATH/bootstrap/host_vars/$ip
    echo -e "wireguard_persistent_keepalive: '30'" >> $INVENTORY_BASE_PATH/bootstrap/host_vars/$ip
    echo -e "wireguard_endpoint: $ip" >> $INVENTORY_BASE_PATH/bootstrap/host_vars/$ip
 done
+python3 $KUBESPRAY_BASE_PATH/contrib/inventory_builder/inventory.py ${INVENTORYIP[@]}
 
 sed -i "s#<backup-url>#$BACKUP_URL#" $INVENTORY_BASE_PATH/bootstrap/group_vars/all.yml
 sed -i "s#<backup-mount>#$BACKUP_MOUNT#" $INVENTORY_BASE_PATH/bootstrap/group_vars/all.yml
