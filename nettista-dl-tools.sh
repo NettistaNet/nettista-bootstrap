@@ -11,9 +11,6 @@ HCLOUD_ARCHIVE=hcloud-linux-amd64.tar.gz
 TF_VERSION=0.12.21
 TF_DOWNLOAD_BASE_URL=https://releases.hashicorp.com/terraform/$TF_VERSION/
 TF_ARCHIVE=terraform_${TF_VERSION}_linux_amd64.zip
-HCLOUD_TF_PROVIDER_VERSION=v1.1.0
-HCLOUD_TF_PROVIDER_DOWNLOAD_BASE_URL=https://github.com/hetznercloud/terraform-provider-hcloud/releases/download/${HCLOUD_TF_PROVIDER_VERSION}/
-HCLOUD_TF_PROVIDER_ARCHIVE=terraform-provider-hcloud_${HCLOUD_TF_PROVIDER_VERSION}_linux_amd64.zip
 HELM_VERSION=v3.1.1
 HELM_DOWNLOAD_BASE_URL=https://get.helm.sh/
 HELM_ARCHIVE=helm-$HELM_VERSION-linux-amd64.tar.gz
@@ -44,7 +41,6 @@ mkdir -p $TOOLS_PATH
 (cd $TOOLS_PATH && curl -L -O $HCLOUD_DOWNLOAD_BASE_URL$HCLOUD_ARCHIVE)
 (cd $TOOLS_PATH && curl -L -O $TF_DOWNLOAD_BASE_URL$TF_ARCHIVE)
 (cd $TOOLS_PATH && curl -L -O $HELM_DOWNLOAD_BASE_URL$HELM_ARCHIVE)
-(cd $TOOLS_PATH && curl -L -O $HCLOUD_TF_PROVIDER_DOWNLOAD_BASE_URL$HCLOUD_TF_PROVIDER_ARCHIVE)
 echo "=> Tools downloaded to $TOOLS_PATH"
 
 echo "====================================================================================================="
@@ -53,11 +49,4 @@ echo "==========================================================================
 tar xvfz $TOOLS_PATH/$HCLOUD_ARCHIVE -C $TOOLS_PATH
 unzip -o -u $TOOLS_PATH/$TF_ARCHIVE -d $TOOLS_PATH
 tar xvfz $TOOLS_PATH/$HELM_ARCHIVE -C $TOOLS_PATH
-unzip -o -u $TOOLS_PATH/$HCLOUD_TF_PROVIDER_ARCHIVE -d $TOOLS_PATH
 echo "=> Extracted tools in $TOOLS_PATH"
-
-echo "====================================================================================================="
-echo "= Install HCLOUD TF Provider ...                                                                    ="
-echo "====================================================================================================="
-mkdir -p ~/.terraform.d/plugins/
-mv $TOOLS_PATH/terraform-provider-hcloud ~/.terraform.d/plugins/
