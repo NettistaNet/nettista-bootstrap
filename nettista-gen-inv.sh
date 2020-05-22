@@ -158,6 +158,8 @@ sed -i "s/# kubeconfig_localhost: false/kubeconfig_localhost: true/" $INVENTORY_
 sed -i "s/# calico_mtu: 1500/calico_mtu: 1400/" $INVENTORY_BASE_PATH/kubespray/group_vars/k8s-cluster/k8s-net-calico.yml
 echo "calico_ipv4pool_ipip: Always" >> $INVENTORY_BASE_PATH/kubespray/group_vars/k8s-cluster/k8s-net-calico.yml
 
+echo "docker_version: \"19.03\"" >> $INVENTORY_BASE_PATH/kubespray/group_vars/all/all.yml
+
 serverIndex=0
 for ip in $SERVER_IP; do
    serverIndex=$((serverIndex+1))
