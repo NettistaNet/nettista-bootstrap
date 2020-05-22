@@ -33,3 +33,4 @@ davfs2_mounts:
     password: <backup-password>
     uid: root
     guid: root
+    mount_opts: rw
