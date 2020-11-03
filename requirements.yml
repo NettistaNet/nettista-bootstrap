@@ -1,0 +1,5 @@
+---
+roles:
+  - src: https://github.com/githubixx/ansible-role-harden-linux
+  - src: https://github.com/githubixx/ansible-role-wireguard.git
+  - src: https://github.com/NettistaNet/ansible-role-ha-proxy.git
