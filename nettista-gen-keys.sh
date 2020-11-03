@@ -3,7 +3,7 @@
 # (c) Copyright 2020 Sascha Retter, All Rights Reserved
 
 PARAMS=""
-VERSION=0.1.0
+VERSION=0.2.0
 
 # Determine information
 this_path=$(readlink -f $0)
@@ -22,7 +22,6 @@ function usage() {
      
      Options:
      --help                   optional     Print this help message
-     -n / --cluster-name      mandatory    Name of the cluster
    "
    exit 1
 }
@@ -32,10 +31,6 @@ while (("$#" )); do
     --help)
       usage
       exit 0
-      ;;
-    -n | --cluster-name)
-      CLUSTER_NAME=$2
-      shift 2
       ;;
     --) # end argument parsing
       shift
@@ -56,12 +51,8 @@ done
 # set positional arguments properly
 eval set -- "$PARAMS"
 
-# validate if mandatory params have been set
-if [ -z ${CLUSTER_NAME+x} ]; then usage; exit 0; fi;
-
-KEYS_BASE_PATH=../../clusters/$CLUSTER_NAME/keys
-PUBLIC_KEY=$KEYS_BASE_PATH/node.key.pub
-PRIVATE_KEY=$KEYS_BASE_PATH/node.key
+PUBLIC_KEY=node.key.pub
+PRIVATE_KEY=node.key
 
 # Take off
 echo -e \
@@ -82,7 +73,6 @@ echo "==========================================================================
 if [[ -f "$PRIVATE_KEY" ]]; then
    echo "# Private key already exists ... skipping."
 else
-   mkdir -p $KEYS_BASE_PATH
    ssh-keygen -t ed25519 -a 100 -f $PRIVATE_KEY -q -N ""
-   echo "=> Keys created in $KEYS_BASE_PATH"
+   echo "=> Keys created."
 fi

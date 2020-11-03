@@ -1,11 +1,7 @@
 ---
 - hosts: all
   roles:
-    - harden-linux
-    - wireguard
-    - ha-proxylb
-    - webdav-client
-#- hosts: CC
-#  roles:
-#    - k8s-bootstrap
+    - ansible-role-harden-linux
+    - ansible-role-wireguard
+    - ansible-role-ha-proxy
 
